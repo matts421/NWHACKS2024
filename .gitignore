@@ -192,6 +192,10 @@ pyrightconfig.json
 .history
 .ionide
 
+<<<<<<< HEAD
 .venv
+=======
+.DS_Store
+>>>>>>> 1687146f61691135a7c14d16b3216fab48693c3c
 
 # End of https://www.toptal.com/developers/gitignore/api/python,visualstudiocode
