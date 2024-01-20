@@ -1,18 +1,27 @@
 # Example file showing a basic pygame "game loop"
 import pygame
 from trash_bins.bins import AbstractTrashBin
+from trash.trash import AbstractTrash
 import sys
 
+# Trash traits
+TRASH_SPEED = 5
+TRASH_PATHS = {"TRASH" : "./assets/banana.png"}
+
+# Bin traits
 BIN_SPEED = 5
+BIN_PATHS = {"GARBAGE" : "./assets/trash.jpg"}
+
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
-BIN_PATHS = {"GARBAGE" : "./assets/trash.jpg"}
+
 
 class Game:
     screen: pygame.display
     clock: pygame.time.Clock
     running: bool
     player: AbstractTrashBin
+    trash: AbstractTrash
 
     def start(self):
         pygame.init()
@@ -20,6 +29,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = True
         self.player = AbstractTrashBin(BIN_PATHS["GARBAGE"], "GarbageBin", self)
+        self.trash = AbstractTrash(TRASH_PATHS["TRASH"], "Garbage", self)
         self.game_loop()
         pygame.quit()
 
@@ -31,6 +41,7 @@ class Game:
             self.screen.fill("black")
             self.handle_key_events()
             self.player.render()
+            self.trash.render()
             pygame.display.flip()
             self.clock.tick(60)
 
