@@ -15,7 +15,7 @@ FLOOR_IMAGE_HEIGHT = 36
 FLOOR_SCALE = 4
 
 # Bin traits
-BIN_SPEED = 5
+BIN_SPEED = 20
 BIN_PATHS = {"GARBAGE" : "./assets/trash.png"}
 
 SCREEN_WIDTH = 1280
@@ -38,7 +38,8 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = True
         self.initialize_assets()
-        self.player = AbstractTrashBin(BIN_PATHS["GARBAGE"], "GarbageBin", self)
+        # self.player = AbstractTrashBin(BIN_PATHS["GARBAGE"], "GarbageBin", self)
+        self.player = AbstractTrashBin("GarbageBin", self)
         self.spawn_timer = 0
         self.trash_list = []        
         self.game_loop()
@@ -75,7 +76,8 @@ class Game:
             self.spawn_timer += 1
             if self.spawn_timer % 50 == 0 and len(self.trash_list) < 10:  # 60 ticks per second, 5 seconds * 60 ticks = 300
                 x_position = random.randint(0, SCREEN_WIDTH - 50)
-                new_trash = AbstractTrash(TRASH_PATHS["TRASH"], "Garbage", self, [x_position, 0])
+                # new_trash = AbstractTrash(TRASH_PATHS["TRASH"], "Garbage", self, [x_position, 0])
+                new_trash = AbstractTrash("Garbage", self, [x_position, 0])
                 self.trash_list.append(new_trash)
 
             # self.trash.render()
