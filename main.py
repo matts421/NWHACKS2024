@@ -72,6 +72,10 @@ class Game:
             for trash in self.trash_list.copy():
                 trash.fall()
                 trash.render()
+
+                if trash.rect.colliderect(self.player.rect) and trash.rect.y + trash.size[1] > self.player.rect.y and trash.rect.y + trash.size[1] < self.player.rect.y + 2 * trash.size[1]:
+                    print(self.player.rect.y)
+                    self.trash_list.remove(trash)
             
             self.spawn_timer += 1
             if self.spawn_timer % 50 == 0 and len(self.trash_list) < 10:  # 60 ticks per second, 5 seconds * 60 ticks = 300
