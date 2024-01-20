@@ -74,7 +74,6 @@ class Game:
                 trash.render()
 
                 if trash.rect.colliderect(self.player.rect) and trash.rect.y + trash.size[1] > self.player.rect.y and trash.rect.y + trash.size[1] < self.player.rect.y + 2 * trash.size[1]:
-                    print(self.player.rect.y)
                     self.trash_list.remove(trash)
             
             self.spawn_timer += 1
