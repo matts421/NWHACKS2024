@@ -1,5 +1,6 @@
 # Example file showing a basic pygame "game loop"
 import pygame
+from trash_bins import AbstractTrashBin
 
 # pygame setup
 pygame.init()
