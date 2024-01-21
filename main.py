@@ -6,12 +6,15 @@ from trash import Trash
 from health.HealthBar import HealthBar
 import random
 
-MENU_BG = pygame.image.load("assets/menu/Background.png")
+#MENU_BG = pygame.image.load("assets/menu/Background.png")
+MENU_BG = pygame.image.load("assets/menu/title.png")
+# EARTH_GIF = "./assets/menu/bigearth.gif"
 
 # Trash traits
 TRASH_SPEED = 5
 TRASH_PATHS = {"TRASH" : "./assets/banana.png"}
-BACKGROUND_IMAGE_PATH = "./assets/6.png"
+## BACKGROUND_IMAGE_PATH = "./assets/6.png"
+BACKGROUND_IMAGE_PATH = "./assets/space.png"
 FLOOR_IMAGE_PATH = "./assets/floor.png"
 
 FLOOR_IMAGE_WIDTH = 18
@@ -115,6 +118,7 @@ class Game:
                 if trash.rect.y > SCREEN_HEIGHT - 60:
                     self.trash_list.remove(trash)
                     self.health_bar.hp -= self.health_bar.max_hp * 0.05
+                    self.incorrect_sound.play()
 
                 if self.health_bar.hp == 0:
                     self.running = False
@@ -170,8 +174,22 @@ class Game:
         return pygame.font.Font("assets/font.ttf", size)
 
     def menu(self):
+        earth_count = 0
+        earth_img = pygame.image.load("./assets/menu/bigearth.png")
+        counter = 0
         while True:
+            if earth_count >= 60: earth_count = 0
+
+            col_num = earth_count % 12
+            row_num = earth_count // 12
+            subset_rect = pygame.Rect(400 * col_num, 400 * row_num, 400, 400)
+            curr_earth = earth_img.subsurface(subset_rect)
             self.screen.blit(MENU_BG, (0, 0))
+            self.screen.blit(curr_earth, (SCREEN_WIDTH // 2 + 100, SCREEN_HEIGHT // 2 - 75))
+            if counter == 3:
+                earth_count += 1
+                counter = 0
+
 
             MENU_MOUSE_POS = pygame.mouse.get_pos()
 
@@ -182,11 +200,11 @@ class Game:
             line1_rect = line1_text.get_rect(center=(SCREEN_WIDTH // 2, 120))
             line2_rect = line2_text.get_rect(center=(SCREEN_WIDTH // 2, 220))
 
-            EASY_BUTTON = Button(image=pygame.image.load("assets/menu/Play Rect.png"), pos=(640, 350),
+            EASY_BUTTON = Button(image=pygame.image.load("assets/menu/Play Rect.png"), pos=(640 - 125, 350),
                                 text_input="EASY", font=self.get_font(75), base_color="#d7fcd4", hovering_color="White")
-            HARD_BUTTON = Button(image=pygame.image.load("assets/menu/Play Rect.png"), pos=(640, 500),
+            HARD_BUTTON = Button(image=pygame.image.load("assets/menu/Play Rect.png"), pos=(640 - 125, 500),
                                 text_input="HARD", font=self.get_font(75), base_color="#d7fcd4", hovering_color="White")
-            QUIT_BUTTON = Button(image=pygame.image.load("assets/menu/Quit Rect.png"), pos=(640, 650),
+            QUIT_BUTTON = Button(image=pygame.image.load("assets/menu/Quit Rect.png"), pos=(640 - 125, 650),
                                 text_input="QUIT", font=self.get_font(75), base_color="#d7fcd4", hovering_color="White")
 
             self.screen.blit(line1_text, line1_rect)
@@ -208,7 +226,7 @@ class Game:
                     if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
                         pygame.quit()
                         sys.exit()
-
+            counter += 1
             pygame.display.update()
         
 if __name__ == "__main__":
