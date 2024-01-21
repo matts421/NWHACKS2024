@@ -12,10 +12,10 @@ GLASS_NAME = "GLASS"
 
 BIN_NAMES = [GARBAGE_NAME, PAPER_NAME, COMPOST_NAME, GLASS_NAME]
 
-BIN_IMAGES = {GARBAGE_NAME: "./assets/black.png",
-              PAPER_NAME: "./assets/blue.png",
-              GLASS_NAME: "./assets/red.png",
-              COMPOST_NAME: "./assets/green.png"}
+BIN_IMAGES = {GARBAGE_NAME: "./assets/bins/black.png",
+              PAPER_NAME: "./assets/bins/blue.png",
+              GLASS_NAME: "./assets/bins/red.png",
+              COMPOST_NAME: "./assets/bins/green.png"}
 
 class TrashBin:
     rect: pygame.Rect
