@@ -35,6 +35,10 @@ GLASS_NAME = "GLASS"
 
 BIN_NAMES = [GARBAGE_NAME, PAPER_NAME, COMPOST_NAME, GLASS_NAME]
 
+EASY = "EASY"
+HARD = "HARD"
+DIFFICULTY = {EASY: 10, HARD: 20}
+
 class Game:
     screen: pygame.display
     clock: pygame.time.Clock
@@ -46,6 +50,7 @@ class Game:
     floor: pygame.image
     health_bar: HealthBar
     score_map: dict
+    difficulty: str
 
     def start(self):
         pygame.init()
@@ -62,6 +67,7 @@ class Game:
                           COMPOST_NAME: 0,
                           GLASS_NAME: 0}
         self.trash_speed = 3
+        self.difficulty = EASY
         self.menu()        
         pygame.quit()
 
@@ -123,6 +129,7 @@ class Game:
                 if self.health_bar.hp == 0:
                     self.running = False
                     self.incorrect_sound.play()
+                    self.losing_screen()
             
             self.health_bar.draw(self.screen)
             self.render_score()
@@ -131,7 +138,7 @@ class Game:
                 self.trash_speed += 1
             
             self.spawn_timer += 1
-            if self.spawn_timer % 100 == 0 and len(self.trash_list) < 10:  # 60 ticks per second, 5 seconds * 60 ticks = 300
+            if self.spawn_timer % (1000 / DIFFICULTY[self.difficulty]) == 0 and len(self.trash_list) < DIFFICULTY[self.difficulty]:  # 60 ticks per second, 5 seconds * 60 ticks = 300
                 x_position = random.randint(0, SCREEN_WIDTH - 50)
                 # new_trash = AbstractTrash(TRASH_PATHS["TRASH"], "Garbage", self, [x_position, 0])
                 state = random.randint(0, 3)
@@ -160,6 +167,7 @@ class Game:
             self.player.move_right()
         if keys[pygame.K_q]:
             self.running = False
+            self.start()
 
         if keys[pygame.K_1]:
             self.player.cycle_bin(0)
@@ -220,13 +228,54 @@ class Game:
                     sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if EASY_BUTTON.checkForInput(MENU_MOUSE_POS):
+                        self.difficulty = EASY
                         self.game_loop()
                     if HARD_BUTTON.checkForInput(MENU_MOUSE_POS):
+                        self.difficulty = HARD
                         self.game_loop()
                     if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
                         pygame.quit()
                         sys.exit()
             counter += 1
+            pygame.display.update()
+        
+    def losing_screen(self):
+        while True:
+            self.screen.blit(MENU_BG, (0, 0))
+
+            MENU_MOUSE_POS = pygame.mouse.get_pos()
+
+            menu_font = self.get_font(100)
+            line1_text = menu_font.render("THE EARTH", True, "#b68f40")
+            line2_text = menu_font.render("IS DEAD!", True, "#b68f40")
+
+            line1_rect = line1_text.get_rect(center=(SCREEN_WIDTH // 2, 120))
+            line2_rect = line2_text.get_rect(center=(SCREEN_WIDTH // 2, 220))
+
+            AGAIN_BUTTON = Button(image=pygame.image.load("assets/menu/Play Rect.png"), pos=(640, 400),
+                                text_input="RETRY", font=self.get_font(75), base_color="#d7fcd4", hovering_color="White")
+            QUIT_BUTTON = Button(image=pygame.image.load("assets/menu/Quit Rect.png"), pos=(640, 550),
+                                text_input="QUIT", font=self.get_font(75), base_color="#d7fcd4", hovering_color="White")
+
+            self.screen.blit(line1_text, line1_rect)
+            self.screen.blit(line2_text, line2_rect)
+
+            for button in [AGAIN_BUTTON, QUIT_BUTTON]:
+                button.changeColor(MENU_MOUSE_POS)
+                button.update(self.screen)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if AGAIN_BUTTON.checkForInput(MENU_MOUSE_POS):
+                        self.running = True
+                        self.start()
+                    if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
+                        pygame.quit()
+                        sys.exit()
+
             pygame.display.update()
         
 if __name__ == "__main__":
