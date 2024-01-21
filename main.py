@@ -6,7 +6,7 @@ from trash import Trash
 from health.HealthBar import HealthBar
 import random
 
-MENU_BG = pygame.image.load("assets/Background.png")
+MENU_BG = pygame.image.load("assets/menu/Background.png")
 
 # Trash traits
 TRASH_SPEED = 5
@@ -153,6 +153,15 @@ class Game:
         if keys[pygame.K_q]:
             self.running = False
 
+        if keys[pygame.K_1]:
+            self.player.cycle_bin(0)
+        if keys[pygame.K_2]:
+            self.player.cycle_bin(1)
+        if keys[pygame.K_3]:
+            self.player.cycle_bin(2)
+        if keys[pygame.K_4]:
+            self.player.cycle_bin(3)
+
     def get_font(self, size): # Returns Press-Start-2P in the desired size
         return pygame.font.Font("assets/font.ttf", size)
 
@@ -165,16 +174,18 @@ class Game:
             MENU_TEXT = self.get_font(100).render("MAIN MENU", True, "#b68f40")
             MENU_RECT = MENU_TEXT.get_rect(center=(640, 100))
 
-            PLAY_BUTTON = Button(image=pygame.image.load("assets/Play Rect.png"), pos=(640, 250),
-                                text_input="PLAY", font=self.get_font(75), base_color="#d7fcd4", hovering_color="White")
-            OPTIONS_BUTTON = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(640, 400),
-                                text_input="OPTIONS", font=self.get_font(75), base_color="#d7fcd4", hovering_color="White")
-            QUIT_BUTTON = Button(image=pygame.image.load("assets/Quit Rect.png"), pos=(640, 550),
+            EASY_BUTTON = Button(image=pygame.image.load("assets/menu/Play Rect.png"), pos=(640, 200),
+                                text_input="EASY MODE", font=self.get_font(75), base_color="#d7fcd4", hovering_color="White")
+            MED_BUTTON = Button(image=pygame.image.load("assets/menu/Options Rect.png"), pos=(640, 350),
+                                text_input="MED  MODE", font=self.get_font(75), base_color="#d7fcd4", hovering_color="White")
+            HARD_BUTTON = Button(image=pygame.image.load("assets/menu/Options Rect.png"), pos=(640, 500),
+                                text_input="HARD  MODE", font=self.get_font(75), base_color="#d7fcd4", hovering_color="White")
+            QUIT_BUTTON = Button(image=pygame.image.load("assets/menu/Quit Rect.png"), pos=(640, 650),
                                 text_input="QUIT", font=self.get_font(75), base_color="#d7fcd4", hovering_color="White")
 
             self.screen.blit(MENU_TEXT, MENU_RECT)
 
-            for button in [PLAY_BUTTON, OPTIONS_BUTTON, QUIT_BUTTON]:
+            for button in [EASY_BUTTON, MED_BUTTON, HARD_BUTTON, QUIT_BUTTON]:
                 button.changeColor(MENU_MOUSE_POS)
                 button.update(self.screen)
 
@@ -183,23 +194,18 @@ class Game:
                     pygame.quit()
                     sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    if EASY_BUTTON.checkForInput(MENU_MOUSE_POS):
+                        self.game_loop()
+                    if MED_BUTTON.checkForInput(MENU_MOUSE_POS):
+                        self.game_loop()
+                    if HARD_BUTTON.checkForInput(MENU_MOUSE_POS):
                         self.game_loop()
                     if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
                         pygame.quit()
                         sys.exit()
 
             pygame.display.update()
-
-        if keys[pygame.K_1]:
-            self.player.cycle_bin(0)
-        if keys[pygame.K_2]:
-            self.player.cycle_bin(1)
-        if keys[pygame.K_3]:
-            self.player.cycle_bin(2)
-        if keys[pygame.K_4]:
-            self.player.cycle_bin(3)
-
+        
 if __name__ == "__main__":
     game : Game = Game()
     game.start()
