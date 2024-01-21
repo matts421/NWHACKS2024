@@ -1,6 +1,6 @@
 import pygame
 from exceptions import InvalidPathError
-## from main import BIN_SPEED, SCREEN_WIDTH, SCREEN_HEIGHT, Game
+
 BIN_SPEED = 20
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
@@ -17,34 +17,13 @@ BIN_IMAGES = {GARBAGE_NAME: "./assets/black.png",
               GLASS_NAME: "./assets/red.png",
               COMPOST_NAME: "./assets/green.png"}
 
-class AbstractTrashBin:
-    # img: pygame.image
-    # name: str
-    # pos: list # (x, y) position tuple
-    # BIN_HEIGHT = 50
-
-    # def __init__(self, img_path: str, name: str, game):
-    #     try:
-    #         self.img = pygame.image.load(img_path)
-    #     except IOError:
-    #         raise InvalidPathError("This image file does not exist!")
-        
-    #     self.name = name
-    #     self.pos = [SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2]
-    #     self.game = game
-
-    name: str
+class TrashBin:
     rect: pygame.Rect
-    color = (0, 255, 0)
-    # pos: list # (x, y) position tuple
-    # BIN_HEIGHT = 50
-    size = (100, 120)
+    size = (130, 100)
     imgs: pygame.image
     img_index: int
 
     def __init__(self, game):
-        self.name = GARBAGE_NAME
-        # self.pos = [SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2]
         self.game = game
         self.rect = pygame.Rect(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 200, *self.size)
         self.img_index = 0 ## default bin is GARBAGE
@@ -52,7 +31,8 @@ class AbstractTrashBin:
             self.imgs = []
             for bin_name in BIN_NAMES:
                 img = pygame.image.load(BIN_IMAGES[bin_name])
-                img = pygame.transform.scale(img, self.size)
+                img_w, img_h = img.get_size()
+                img = pygame.transform.scale(img, (img_w // 3, img_h // 3))
                 self.imgs.append(img)
         except IOError:
             raise InvalidPathError("This image file does not exist!")
@@ -67,6 +47,5 @@ class AbstractTrashBin:
         self.img_index = (self.img_index + 1) % len(BIN_IMAGES)
 
     def render(self):
-        pygame.draw.rect(self.game.screen, (0, 0, 0, 0), self.rect)
-        self.game.screen.blit(self.imgs[self.img_index], (self.rect.x, self.rect.y))
-        #self.game.screen.draw.rect((0, 0, 0, 0), self.rect)
+        pygame.draw.rect(self.game.screen, (0, 0, 0), self.rect)
+        self.game.screen.blit(self.imgs[self.img_index], (self.rect.x - self.size[0] // 5, self.rect.y - self.size[1] // 7))
