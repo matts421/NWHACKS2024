@@ -43,8 +43,8 @@ class TrashBin:
     def move_right(self):
         self.rect.x += BIN_SPEED
 
-    def cycle_bin(self):
-        self.img_index = (self.img_index + 1) % len(BIN_IMAGES)
+    def cycle_bin(self, type: int):
+        self.img_index = type
 
     def render(self):
         pygame.draw.rect(self.game.screen, (0, 0, 0), self.rect)

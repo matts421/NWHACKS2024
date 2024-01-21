@@ -1,7 +1,7 @@
 # Example file showing a basic pygame "game loop"
 import pygame
 from bins import TrashBin
-from trash.trash import AbstractTrash
+from trash import Trash
 from health.HealthBar import HealthBar
 import random
 
@@ -47,7 +47,6 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = True
         self.initialize_assets()
-        # self.player = AbstractTrashBin(BIN_PATHS["GARBAGE"], "GarbageBin", self)
         self.player = TrashBin(self)
         self.spawn_timer = 0
         self.trash_list = []
@@ -74,10 +73,6 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_x:
-                        self.player.cycle_bin()
-
 
             self.screen.blit(self.background, (0, 0))
             self.draw_floor()
@@ -85,6 +80,9 @@ class Game:
             #self.screen.fill("black")
             self.handle_key_events()
             self.player.render()
+
+            if (self.player.rect.x + self.player.rect.width) > SCREEN_WIDTH: self.player.rect.x = SCREEN_WIDTH - self.player.rect.width
+            if self.player.rect.x < 0: self.player.rect.x = 0
 
             for trash in self.trash_list.copy():
                 trash.fall()
@@ -102,7 +100,6 @@ class Game:
 
                 if self.health_bar.hp == 0:
                     self.running = False
-                    print(self.score_map)
             
             self.health_bar.draw(self.screen)
             self.render_score()
@@ -112,7 +109,7 @@ class Game:
                 x_position = random.randint(0, SCREEN_WIDTH - 50)
                 # new_trash = AbstractTrash(TRASH_PATHS["TRASH"], "Garbage", self, [x_position, 0])
                 state = random.randint(0, 3)
-                new_trash = AbstractTrash("Garbage", self, [x_position, 0], state)
+                new_trash = Trash(self, (x_position, 0), state)
                 self.trash_list.append(new_trash)
 
             # self.trash.render()
@@ -137,6 +134,15 @@ class Game:
             self.player.move_right()
         if keys[pygame.K_q]:
             self.running = False
+
+        if keys[pygame.K_1]:
+            self.player.cycle_bin(0)
+        if keys[pygame.K_2]:
+            self.player.cycle_bin(1)
+        if keys[pygame.K_3]:
+            self.player.cycle_bin(2)
+        if keys[pygame.K_4]:
+            self.player.cycle_bin(3)
 
 if __name__ == "__main__":
     game : Game = Game()
