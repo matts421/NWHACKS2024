@@ -10,6 +10,7 @@ import random
 MENU_BG = pygame.image.load("assets/menu/bluespace.png")
 RETRY_BG = pygame.image.load("./assets/menu/title.png")
 DEAD_EARTH = pygame.image.load("./assets/menu/deadearth.png")
+WIN_CONDITION = 15
 
 BLACK_BIN = pygame.image.load("./assets/bins/black.png")
 RED_BIN = pygame.image.load("./assets/bins/red.png")
@@ -61,6 +62,8 @@ class Game:
 
     def start(self):
         pygame.init()
+        pygame.display.set_caption("Waste Invaders")
+        pygame.display.set_icon(pygame.image.load("./assets/menu/earth.gif"))
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.running = True
@@ -135,8 +138,8 @@ class Game:
                     self.incorrect_sound.play()
 
                 # WIN
-                if (self.score_map[GARBAGE_NAME] == 1 and self.score_map[PAPER_NAME] == 1 and
-                    self.score_map[COMPOST_NAME] == 1 and self.score_map[GLASS_NAME] == 1):
+                if (self.score_map[GARBAGE_NAME] >= WIN_CONDITION and self.score_map[PAPER_NAME] >= WIN_CONDITION and
+                    self.score_map[COMPOST_NAME] >= WIN_CONDITION and self.score_map[GLASS_NAME] >= WIN_CONDITION):
                     self.running = False
                     self.end_screen()
 
