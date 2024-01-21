@@ -41,7 +41,7 @@ class Game:
         self.running = True
         self.initialize_assets()
         # self.player = AbstractTrashBin(BIN_PATHS["GARBAGE"], "GarbageBin", self)
-        self.player = AbstractTrashBin("GarbageBin", self)
+        self.player = AbstractTrashBin(self)
         self.spawn_timer = 0
         self.trash_list = []
         self.health_bar = HealthBar(SCREEN_WIDTH - 350, SCREEN_HEIGHT - 50, 300, 40, 100)
@@ -63,6 +63,9 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+                if event.type == pygame.KEYUP:
+                    if event.key == pygame.K_x:
+                        self.player.cycle_bin()
 
 
             self.screen.blit(self.background, (0, 0))
