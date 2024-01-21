@@ -67,6 +67,19 @@ class Game:
         floor_png = floor_png.subsurface(subset_rect)
         self.floor = pygame.transform.scale(floor_png,
                                             (FLOOR_SCALE * FLOOR_IMAGE_WIDTH, FLOOR_SCALE * FLOOR_IMAGE_HEIGHT))
+        correct_file = "./assets/sounds/correct.wav"
+        incorrect_file = "./assets/sounds/incorrect.wav"
+
+        # Initialize the Pygame mixer
+        pygame.mixer.init()
+        pygame.mixer.music.load("./assets/sounds/title_screen.wav")
+
+        # Play the background music in an infinite loop
+        pygame.mixer.music.play(-1)
+
+        # Create Sound objects
+        self.correct_sound = pygame.mixer.Sound(correct_file)
+        self.incorrect_sound = pygame.mixer.Sound(incorrect_file)
 
     def game_loop(self):
         while self.running:
@@ -93,6 +106,7 @@ class Game:
                     current_score = self.score_map[BIN_NAMES[self.player.img_index]]
                     self.score_map[BIN_NAMES[self.player.img_index]] = current_score + 1
                     self.trash_list.remove(trash)
+                    self.correct_sound.play()
 
                 if trash.rect.y > SCREEN_HEIGHT - 60:
                     self.trash_list.remove(trash)
@@ -100,12 +114,13 @@ class Game:
 
                 if self.health_bar.hp == 0:
                     self.running = False
+                    self.incorrect_sound.play()
             
             self.health_bar.draw(self.screen)
             self.render_score()
             
             self.spawn_timer += 1
-            if self.spawn_timer % 50 == 0 and len(self.trash_list) < 10:  # 60 ticks per second, 5 seconds * 60 ticks = 300
+            if self.spawn_timer % 100 == 0 and len(self.trash_list) < 10:  # 60 ticks per second, 5 seconds * 60 ticks = 300
                 x_position = random.randint(0, SCREEN_WIDTH - 50)
                 # new_trash = AbstractTrash(TRASH_PATHS["TRASH"], "Garbage", self, [x_position, 0])
                 state = random.randint(0, 3)
