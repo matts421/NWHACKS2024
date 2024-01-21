@@ -23,6 +23,9 @@ TRASH_SPEED = 5
 ## BACKGROUND_IMAGE_PATH = "./assets/6.png"
 BACKGROUND_IMAGE_PATH = "./assets/space.png"
 FLOOR_IMAGE_PATH = "./assets/floor.png"
+HEALTHY_EARTH = pygame.image.load("./assets/menu/bigearth.png")
+subset_rect = pygame.Rect(0, 0, 400, 400)
+HEALTHY_EARTH = HEALTHY_EARTH.subsurface(subset_rect)
 
 FLOOR_IMAGE_WIDTH = 18
 FLOOR_IMAGE_HEIGHT = 36
@@ -63,7 +66,7 @@ class Game:
     def start(self):
         pygame.init()
         pygame.display.set_caption("Waste Invaders")
-        pygame.display.set_icon(pygame.image.load("./assets/menu/earth.gif"))
+        pygame.display.set_icon(HEALTHY_EARTH)
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.running = True
@@ -282,17 +285,18 @@ class Game:
     def end_screen(self):
         while True:
             self.screen.blit(RETRY_BG, (0, 0))
-            self.screen.blit(DEAD_EARTH, (SCREEN_WIDTH // 2 + 100, SCREEN_HEIGHT // 2 - 75))
-
+            
             MENU_MOUSE_POS = pygame.mouse.get_pos()
 
             menu_font = self.get_font(100)
             if self.loss:
                 line1_text = menu_font.render("THE EARTH", True, "#b68f40")
                 line2_text = menu_font.render("IS DEAD!", True, "#b68f40")
+                self.screen.blit(DEAD_EARTH, (SCREEN_WIDTH // 2 + 100, SCREEN_HEIGHT // 2 - 75))
             else:
                 line1_text = menu_font.render("YOU SAVED", True, "#b68f40")
                 line2_text = menu_font.render("THE EARTH!", True, "#b68f40")
+                pygame.display.set_icon(HEALTHY_EARTH)
 
             line1_rect = line1_text.get_rect(center=(SCREEN_WIDTH // 2, 120))
             line2_rect = line2_text.get_rect(center=(SCREEN_WIDTH // 2, 220))
