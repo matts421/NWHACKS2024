@@ -51,6 +51,7 @@ class Game:
     health_bar: HealthBar
     score_map: dict
     difficulty: str
+    loss: bool
 
     def start(self):
         pygame.init()
@@ -68,6 +69,7 @@ class Game:
                           GLASS_NAME: 0}
         self.trash_speed = 3
         self.difficulty = EASY
+        self.loss = False
         self.menu()        
         pygame.quit()
 
@@ -126,10 +128,18 @@ class Game:
                     self.health_bar.hp -= self.health_bar.max_hp * 0.05
                     self.incorrect_sound.play()
 
+                # WIN
+                if (self.score_map[GARBAGE_NAME] == 1 and self.score_map[PAPER_NAME] == 1 and
+                    self.score_map[COMPOST_NAME] == 1 and self.score_map[GLASS_NAME] == 1):
+                    self.running = False
+                    self.end_screen()
+
+                # LOSS
                 if self.health_bar.hp == 0:
                     self.running = False
                     self.incorrect_sound.play()
-                    self.losing_screen()
+                    self.loss = True
+                    self.end_screen()
             
             self.health_bar.draw(self.screen)
             self.render_score()
@@ -239,15 +249,19 @@ class Game:
             counter += 1
             pygame.display.update()
         
-    def losing_screen(self):
+    def end_screen(self):
         while True:
             self.screen.blit(MENU_BG, (0, 0))
 
             MENU_MOUSE_POS = pygame.mouse.get_pos()
 
             menu_font = self.get_font(100)
-            line1_text = menu_font.render("THE EARTH", True, "#b68f40")
-            line2_text = menu_font.render("IS DEAD!", True, "#b68f40")
+            if self.loss:
+                line1_text = menu_font.render("THE EARTH", True, "#b68f40")
+                line2_text = menu_font.render("IS DEAD!", True, "#b68f40")
+            else:
+                line1_text = menu_font.render("YOU SAVED", True, "#b68f40")
+                line2_text = menu_font.render("THE EARTH!", True, "#b68f40")
 
             line1_rect = line1_text.get_rect(center=(SCREEN_WIDTH // 2, 120))
             line2_rect = line2_text.get_rect(center=(SCREEN_WIDTH // 2, 220))
