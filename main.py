@@ -7,7 +7,9 @@ from health.HealthBar import HealthBar
 import random
 
 #MENU_BG = pygame.image.load("assets/menu/Background.png")
-MENU_BG = pygame.image.load("assets/menu/title.png")
+MENU_BG = pygame.image.load("assets/menu/bluespace.png")
+RETRY_BG = pygame.image.load("./assets/menu/title.png")
+DEAD_EARTH = pygame.image.load("./assets/menu/deadearth.png")
 # EARTH_GIF = "./assets/menu/bigearth.gif"
 
 # Trash traits
@@ -241,7 +243,8 @@ class Game:
         
     def losing_screen(self):
         while True:
-            self.screen.blit(MENU_BG, (0, 0))
+            self.screen.blit(RETRY_BG, (0, 0))
+            self.screen.blit(DEAD_EARTH, (SCREEN_WIDTH // 2 + 100, SCREEN_HEIGHT // 2 - 75))
 
             MENU_MOUSE_POS = pygame.mouse.get_pos()
 
@@ -252,9 +255,9 @@ class Game:
             line1_rect = line1_text.get_rect(center=(SCREEN_WIDTH // 2, 120))
             line2_rect = line2_text.get_rect(center=(SCREEN_WIDTH // 2, 220))
 
-            AGAIN_BUTTON = Button(image=pygame.image.load("assets/menu/Play Rect.png"), pos=(640, 400),
+            AGAIN_BUTTON = Button(image=pygame.image.load("assets/menu/Play Rect.png"), pos=(640 - 125, 400),
                                 text_input="RETRY", font=self.get_font(75), base_color="#d7fcd4", hovering_color="White")
-            QUIT_BUTTON = Button(image=pygame.image.load("assets/menu/Quit Rect.png"), pos=(640, 550),
+            QUIT_BUTTON = Button(image=pygame.image.load("assets/menu/Quit Rect.png"), pos=(640 - 125, 550),
                                 text_input="QUIT", font=self.get_font(75), base_color="#d7fcd4", hovering_color="White")
 
             self.screen.blit(line1_text, line1_rect)
