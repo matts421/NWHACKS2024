@@ -10,11 +10,15 @@ import random
 MENU_BG = pygame.image.load("assets/menu/bluespace.png")
 RETRY_BG = pygame.image.load("./assets/menu/title.png")
 DEAD_EARTH = pygame.image.load("./assets/menu/deadearth.png")
+
+BLACK_BIN = pygame.image.load("./assets/bins/black.png")
+RED_BIN = pygame.image.load("./assets/bins/red.png")
+GREEN_BIN = pygame.image.load("./assets/bins/green.png")
+BLUE_BIN = pygame.image.load("./assets/bins/blue.png")
 # EARTH_GIF = "./assets/menu/bigearth.gif"
 
 # Trash traits
 TRASH_SPEED = 5
-TRASH_PATHS = {"TRASH" : "./assets/banana.png"}
 ## BACKGROUND_IMAGE_PATH = "./assets/6.png"
 BACKGROUND_IMAGE_PATH = "./assets/space.png"
 FLOOR_IMAGE_PATH = "./assets/floor.png"
@@ -152,10 +156,31 @@ class Game:
             self.clock.tick(60)
     
     def render_score(self):
-        font = pygame.font.Font(None, 36)
-        score_text = f"Garbage: {self.score_map[GARBAGE_NAME]} | Paper: {self.score_map[PAPER_NAME]} | Compost: {self.score_map[COMPOST_NAME]} | Containers: {self.score_map[GLASS_NAME]}"
-        score_surface = font.render(score_text, True, (255, 255, 255))
-        self.screen.blit(score_surface, (10, 10))
+        font = self.get_font(24)
+        black_text = f"{self.score_map[GARBAGE_NAME]}"
+        blue_text = f"{self.score_map[PAPER_NAME]}"
+        red_text = f"{self.score_map[GLASS_NAME]}"
+        green_text = f"{self.score_map[COMPOST_NAME]}"
+
+        black = pygame.transform.scale(BLACK_BIN, (BLACK_BIN.get_size()[0] // 8, BLACK_BIN.get_size()[1] // 8))
+        blue = pygame.transform.scale(BLUE_BIN, (BLUE_BIN.get_size()[0] // 8, BLUE_BIN.get_size()[1] // 8))
+        red = pygame.transform.scale(RED_BIN, (RED_BIN.get_size()[0] // 8, RED_BIN.get_size()[1] // 8))
+        green = pygame.transform.scale(GREEN_BIN, (GREEN_BIN.get_size()[0] // 8, GREEN_BIN.get_size()[1] // 8))
+
+        self.screen.blit(black, (10, 10))
+        self.screen.blit(blue, (70, 10))
+        self.screen.blit(red, (130, 10))
+        self.screen.blit(green, (190, 10))
+
+        black_score = font.render(black_text, True, (255, 255, 255))
+        blue_score = font.render(blue_text, True, (255, 255, 255))
+        red_score  = font.render(red_text, True, (255, 255, 255))
+        green_score = font.render(green_text, True, (255, 255, 255))
+
+        self.screen.blit(black_score, (10, 10))
+        self.screen.blit(blue_score, (70, 10))
+        self.screen.blit(red_score, (130, 10))
+        self.screen.blit(green_score, (190, 10))
 
     def draw_floor(self):
         for i in range(SCREEN_WIDTH // (FLOOR_SCALE * FLOOR_IMAGE_WIDTH) + 1):
