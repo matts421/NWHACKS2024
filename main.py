@@ -58,6 +58,7 @@ class Game:
                           PAPER_NAME: 0,
                           COMPOST_NAME: 0,
                           GLASS_NAME: 0}
+        self.trash_speed = 3
         self.menu()        
         pygame.quit()
 
@@ -121,13 +122,16 @@ class Game:
             
             self.health_bar.draw(self.screen)
             self.render_score()
+
+            if self.spawn_timer % 1000 == 0:
+                self.trash_speed += 1
             
             self.spawn_timer += 1
             if self.spawn_timer % 100 == 0 and len(self.trash_list) < 10:  # 60 ticks per second, 5 seconds * 60 ticks = 300
                 x_position = random.randint(0, SCREEN_WIDTH - 50)
                 # new_trash = AbstractTrash(TRASH_PATHS["TRASH"], "Garbage", self, [x_position, 0])
                 state = random.randint(0, 3)
-                new_trash = Trash(self, (x_position, 0), state)
+                new_trash = Trash(self, (x_position, 0), state, self.trash_speed)
                 self.trash_list.append(new_trash)
 
             # self.trash.render()
@@ -171,21 +175,24 @@ class Game:
 
             MENU_MOUSE_POS = pygame.mouse.get_pos()
 
-            MENU_TEXT = self.get_font(100).render("MAIN MENU", True, "#b68f40")
-            MENU_RECT = MENU_TEXT.get_rect(center=(640, 100))
+            menu_font = self.get_font(100)
+            line1_text = menu_font.render("WASTE", True, "#b68f40")
+            line2_text = menu_font.render("INVADERS", True, "#b68f40")
 
-            EASY_BUTTON = Button(image=pygame.image.load("assets/menu/Play Rect.png"), pos=(640, 200),
-                                text_input="EASY MODE", font=self.get_font(75), base_color="#d7fcd4", hovering_color="White")
-            MED_BUTTON = Button(image=pygame.image.load("assets/menu/Options Rect.png"), pos=(640, 350),
-                                text_input="MED  MODE", font=self.get_font(75), base_color="#d7fcd4", hovering_color="White")
-            HARD_BUTTON = Button(image=pygame.image.load("assets/menu/Options Rect.png"), pos=(640, 500),
-                                text_input="HARD  MODE", font=self.get_font(75), base_color="#d7fcd4", hovering_color="White")
+            line1_rect = line1_text.get_rect(center=(SCREEN_WIDTH // 2, 120))
+            line2_rect = line2_text.get_rect(center=(SCREEN_WIDTH // 2, 220))
+
+            EASY_BUTTON = Button(image=pygame.image.load("assets/menu/Play Rect.png"), pos=(640, 350),
+                                text_input="EASY", font=self.get_font(75), base_color="#d7fcd4", hovering_color="White")
+            HARD_BUTTON = Button(image=pygame.image.load("assets/menu/Play Rect.png"), pos=(640, 500),
+                                text_input="HARD", font=self.get_font(75), base_color="#d7fcd4", hovering_color="White")
             QUIT_BUTTON = Button(image=pygame.image.load("assets/menu/Quit Rect.png"), pos=(640, 650),
                                 text_input="QUIT", font=self.get_font(75), base_color="#d7fcd4", hovering_color="White")
 
-            self.screen.blit(MENU_TEXT, MENU_RECT)
+            self.screen.blit(line1_text, line1_rect)
+            self.screen.blit(line2_text, line2_rect)
 
-            for button in [EASY_BUTTON, MED_BUTTON, HARD_BUTTON, QUIT_BUTTON]:
+            for button in [EASY_BUTTON, HARD_BUTTON, QUIT_BUTTON]:
                 button.changeColor(MENU_MOUSE_POS)
                 button.update(self.screen)
 
@@ -195,8 +202,6 @@ class Game:
                     sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if EASY_BUTTON.checkForInput(MENU_MOUSE_POS):
-                        self.game_loop()
-                    if MED_BUTTON.checkForInput(MENU_MOUSE_POS):
                         self.game_loop()
                     if HARD_BUTTON.checkForInput(MENU_MOUSE_POS):
                         self.game_loop()

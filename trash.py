@@ -19,11 +19,13 @@ class Trash:
     size = (5, 5)
     state = int
     img: pygame.image
+    speed = int
 
-    def __init__(self, game, pos: tuple, index: int):
+    def __init__(self, game, pos: tuple, index: int, speed):
         self.rect = pygame.Rect(pos[0], pos[1], *self.size)
         self.game = game
         self.state = index
+        self.speed = speed
 
         if (self.state == 0): folder_path = "./assets/trash/trash"
         elif (self.state == 1): folder_path = "./assets/trash/paper"
@@ -41,7 +43,7 @@ class Trash:
 
     def fall(self):
         # Move the trash down the screen
-        self.rect.y += TRASH_SPEED
+        self.rect.y += self.speed
 
     def render(self):
         pygame.draw.rect(self.game.screen, (100, 100, 100), self.rect)
