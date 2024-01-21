@@ -113,6 +113,7 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+                    sys.exit()
 
             self.screen.blit(self.background, (0, 0))
             self.draw_floor()
@@ -296,7 +297,7 @@ class Game:
             else:
                 line1_text = menu_font.render("YOU SAVED", True, "#b68f40")
                 line2_text = menu_font.render("THE EARTH!", True, "#b68f40")
-                pygame.display.set_icon(HEALTHY_EARTH)
+                self.screen.blit(HEALTHY_EARTH, (SCREEN_WIDTH // 2 + 100, SCREEN_HEIGHT // 2 - 75))
 
             line1_rect = line1_text.get_rect(center=(SCREEN_WIDTH // 2, 120))
             line2_rect = line2_text.get_rect(center=(SCREEN_WIDTH // 2, 220))
