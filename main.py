@@ -44,7 +44,7 @@ class Game:
         self.player = TrashBin(self)
         self.spawn_timer = 0
         self.trash_list = []
-        self.health_bar = HealthBar(SCREEN_WIDTH - 350, SCREEN_HEIGHT - 50, 300, 40, 100)
+        self.health_bar = HealthBar(SCREEN_WIDTH - 350, SCREEN_HEIGHT - 25, 300, 15, 100)
         self.game_loop()
         pygame.quit()
 
