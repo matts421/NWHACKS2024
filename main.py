@@ -53,7 +53,7 @@ class Game:
         self.player = TrashBin(self)
         self.spawn_timer = 0
         self.trash_list = []
-        self.health_bar = HealthBar(SCREEN_WIDTH - 350, SCREEN_HEIGHT - 25, 300, 15, 100)
+        self.health_bar = HealthBar(SCREEN_WIDTH - 416, 35, 385, 15, 100)
         self.score_map = {GARBAGE_NAME: 0,
                           PAPER_NAME: 0,
                           COMPOST_NAME: 0,

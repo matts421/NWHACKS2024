@@ -8,8 +8,10 @@ class HealthBar:
         self.h = h
         self.hp = max_hp
         self.max_hp = max_hp
+        self.img = pygame.image.load("./assets/healthbar.png")
 
     def draw(self, surface):
         ratio = self.hp / self.max_hp
         pygame.draw.rect(surface, "red", (self.x, self.y, self.w, self.h))
         pygame.draw.rect(surface, "green", (self.x, self.y, self.w * ratio, self.h))
+        surface.blit(self.img, (self.x, self.y - 25))
