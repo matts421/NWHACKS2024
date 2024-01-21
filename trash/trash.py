@@ -21,8 +21,8 @@ class AbstractTrash:
         self.rect.y += TRASH_SPEED
 
         # Delete the trash if it goes out of bounds
-        if self.rect.y > SCREEN_HEIGHT:
-            self.game.trash_list.remove(self)
+        # if self.rect.y > SCREEN_HEIGHT:
+        #     self.game.trash_list.remove(self)
 
     def render(self):
         pygame.draw.rect(self.game.screen, self.color, self.rect)

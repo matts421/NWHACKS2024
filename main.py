@@ -2,6 +2,7 @@
 import pygame
 from trash_bins.bins import AbstractTrashBin
 from trash.trash import AbstractTrash
+from health.HealthBar import HealthBar
 import random
 
 # Trash traits
@@ -31,6 +32,7 @@ class Game:
     trash_list: list
     spawn_timer: int
     floor: pygame.image
+    health_bar: HealthBar
 
     def start(self):
         pygame.init()
@@ -41,7 +43,8 @@ class Game:
         # self.player = AbstractTrashBin(BIN_PATHS["GARBAGE"], "GarbageBin", self)
         self.player = AbstractTrashBin("GarbageBin", self)
         self.spawn_timer = 0
-        self.trash_list = []        
+        self.trash_list = []
+        self.health_bar = HealthBar(SCREEN_WIDTH - 350, SCREEN_HEIGHT - 50, 300, 40, 100)
         self.game_loop()
         pygame.quit()
 
@@ -75,6 +78,15 @@ class Game:
 
                 if trash.rect.colliderect(self.player.rect) and trash.rect.y + trash.size[1] > self.player.rect.y and trash.rect.y + trash.size[1] < self.player.rect.y + 2 * trash.size[1]:
                     self.trash_list.remove(trash)
+
+                if trash.rect.y > SCREEN_HEIGHT - 60:
+                    self.trash_list.remove(trash)
+                    self.health_bar.hp -= self.health_bar.max_hp * 0.05
+
+                if self.health_bar.hp == 0:
+                    self.running = False
+            
+            self.health_bar.draw(self.screen)
             
             self.spawn_timer += 1
             if self.spawn_timer % 50 == 0 and len(self.trash_list) < 10:  # 60 ticks per second, 5 seconds * 60 ticks = 300
