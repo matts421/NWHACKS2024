@@ -33,6 +33,7 @@ class Game:
     spawn_timer: int
     floor: pygame.image
     health_bar: HealthBar
+    score_map: {}
 
     def start(self):
         pygame.init()
@@ -46,6 +47,10 @@ class Game:
         self.trash_list = []
         self.health_bar = HealthBar(SCREEN_WIDTH - 350, SCREEN_HEIGHT - 25, 300, 15, 100)
         self.game_loop()
+        self.score_map = {"GARBAGE": 0,
+                          "PAPER": 0,
+                          "COMPOST": 0,
+                          "GLASS": 0}
         pygame.quit()
 
     def initialize_assets(self):
@@ -79,7 +84,8 @@ class Game:
                 trash.fall()
                 trash.render()
 
-                if trash.rect.colliderect(self.player.rect) and trash.rect.y + trash.size[1] > self.player.rect.y and trash.rect.y + trash.size[1] < self.player.rect.y + 2 * trash.size[1]:
+                if (trash.rect.colliderect(self.player.rect) and trash.rect.y + trash.size[1] > self.player.rect.y and 
+                trash.rect.y + trash.size[1] < self.player.rect.y + 2 * trash.size[1] and self.player.img_index == trash.state):
                     self.trash_list.remove(trash)
 
                 if trash.rect.y > SCREEN_HEIGHT - 60:
@@ -95,7 +101,8 @@ class Game:
             if self.spawn_timer % 50 == 0 and len(self.trash_list) < 10:  # 60 ticks per second, 5 seconds * 60 ticks = 300
                 x_position = random.randint(0, SCREEN_WIDTH - 50)
                 # new_trash = AbstractTrash(TRASH_PATHS["TRASH"], "Garbage", self, [x_position, 0])
-                new_trash = AbstractTrash("Garbage", self, [x_position, 0])
+                state = random.randint(0, 3)
+                new_trash = AbstractTrash("Garbage", self, [x_position, 0], state)
                 self.trash_list.append(new_trash)
 
             # self.trash.render()
